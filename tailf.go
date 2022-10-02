@@ -40,9 +40,8 @@ func tailf() {
 	}
 	defer file.Close()
 
-	fileinfo, _ := file.Stat()
 	// 不是文件时报错
-	if fileinfo.IsDir() {
+	if fileinfo, _ := file.Stat(); fileinfo.IsDir() {
 		fmt.Printf("%s 为目录\n", path)
 		return
 	}
