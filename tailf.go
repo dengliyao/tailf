@@ -27,6 +27,26 @@ func tailflag() (int, string) {
 	return line, path
 }
 
+func tailfline(reader *bufio.Reader) {
+	for {
+		b, err := reader.ReadBytes('\n') // ReadBytes 读取直到输入中第一次出现分隔符，返回一个包含数据的切片，直到并包括分隔符
+		if err == io.EOF {
+			time.Sleep(time.Second * 1)
+		}
+		fmt.Print(string(b)) //
+	}
+}
+
+func tailline(reader *bufio.Reader) {
+	for {
+		b, err := reader.ReadBytes('\n')
+		if err == io.EOF {
+			break
+		}
+		fmt.Print(string(b))
+	}
+}
+
 func tailf() {
 	line, path := tailflag()
 	if path == "" {
@@ -52,13 +72,12 @@ func tailf() {
 	}
 
 	reader := bufio.NewReader(file)
-	for {
-		b, err := reader.ReadBytes('\n') // ReadBytes 读取直到输入中第一次出现分隔符，返回一个包含数据的切片，直到并包括分隔符
-		if err == io.EOF {
-			time.Sleep(time.Second * 1)
-		}
-		fmt.Print(string(b)) //
+	if line == 0 {
+		tailline(reader)
+	} else {
+		tailfline(reader)
 	}
+
 }
 
 func main() {
